@@ -1,0 +1,7 @@
+.idea
+docs
+.github
+proto
+*.md
+.claude
+CLAUDE.md

@@ -1,0 +1,7 @@
+.idea
+.claude
+CLAUDE.md
+.DS_Store
+out/*
+*.exe
+example/
