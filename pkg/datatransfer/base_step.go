@@ -67,8 +67,8 @@ func (t *Transfer) TransformBaseStep(
 func buildBaseStep(
 	baseRes *result.Base, cost, betValue uint64, initFsCount, initRsCount uint32,
 ) (*baseDto.Step, error) {
-	// Transform the initial board state before any modifications
-	symbols, err := TransformSymbols(baseRes.Board, betValue)
+	// Transform the board and mark the jackpot coin positions
+	symbols, err := TransformSymbols(baseRes.Board, baseRes.CoinsResult)
 	if err != nil {
 		return nil, fmt.Errorf("transform before symbols: %w", err)
 	}
@@ -83,7 +83,7 @@ func buildBaseStep(
 	totalWin := baseRes.TotalWin() * betValue
 
 	// Build the payload containing all game state information
-	payload := buildBasePayload(eventList, symbols, nil, initFsCount, initRsCount)
+	payload := buildBasePayload(eventList, symbols, initFsCount, initRsCount)
 
 	// Construct and return the complete step DTO
 	return &baseDto.Step{
@@ -102,22 +102,20 @@ func buildBaseStep(
 //
 // Parameters:
 //   - eventList: all game events that occurred during this spin
-//   - symbols: the board state before game logic was applied
-//   - afterSymbols: the board state after game logic was applied
+//   - symbols: the board symbols, with the jackpot coin positions marked
 //   - freeSpinsAdded: number of free spins triggered (0 if none)
 //   - initRsCount: number of respins triggered (0 if none)
 //
 // Returns:
 //   - baseDto.Payload with all game state data populated
 func buildBasePayload(
-	eventList []events.Event, symbols, afterSymbols []*common.Symbol,
+	eventList []events.Event, symbols []*common.Symbol,
 	freeSpinsAdded, initRsCount uint32,
 ) baseDto.Payload {
 	// Initialize the payload with core game data
 	payload := baseDto.Payload{
 		Events:       eventList,
 		Symbols:      symbols,
-		AfterSymbols: afterSymbols,
 		NextStepType: nextStepTypeFromBase(freeSpinsAdded, initRsCount),
 		Counter:      nil, // Will be populated only if free spins were triggered
 	}

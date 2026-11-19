@@ -1,4 +1,3 @@
-//nolint:all // it's ok for enter step
 package datatransfer
 
 import (
@@ -28,7 +27,7 @@ func GetEnterResult(betValue uint64, gameMods *game.Mods) (*step.LoadGameResult,
 	simpleCostMultiplier := gameMods.Simple.CostMultiplier()
 	roundCost := betValue * simpleCostMultiplier
 
-	clientEnterStep, err := enterStep(roundCost, betValue)
+	clientEnterStep, err := enterStep(roundCost)
 	if err != nil {
 		return nil, fmt.Errorf("get enter step: %w", err)
 	}
@@ -51,13 +50,12 @@ func GetEnterResult(betValue uint64, gameMods *game.Mods) (*step.LoadGameResult,
 //
 // Parameters:
 //   - cost: the cost of a spin at the current bet level
-//   - betValue: the player's bet amount
 //
 // Returns:
 //   - pointer to base Step DTO representing the initial state
 //   - error if construction fails
-func enterStep(cost, betValue uint64) (*base.Step, error) {
-	clientSymbols, err := TransformSymbols(initBoard(), betValue)
+func enterStep(cost uint64) (*base.Step, error) {
+	clientSymbols, err := TransformSymbols(initBoard(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("transfer symbols: %w", err)
 	}
