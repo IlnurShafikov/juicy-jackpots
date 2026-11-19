@@ -38,8 +38,9 @@ const (
 
 // Game mechanics constants
 const (
-	// InitRespinsCount defines the initial number of respins when the respin feature is triggered
-	InitRespinsCount    = 3
+	// MaxRowIndex is the total number of rows on the game board.
+	MaxRowIndex = 2
+
 	Step_TYPE_BASE_SPIN = 1
 	Step_TYPE_FREE_SPIN = 2
 	Step_TYPE_RE_SPIN   = 3

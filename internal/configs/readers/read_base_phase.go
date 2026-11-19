@@ -3,8 +3,11 @@ package readers
 import (
 	"fmt"
 
+	"github.com/IlnurShafikov/juicy-jackpots/internal/components/filler"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/components/manager"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/configs"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/configs/readers/common"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/rules"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/game/phase/base"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/tools"
 	"github.com/IlnurShafikov/slot-engine/pkg/calculators"
@@ -44,11 +47,45 @@ func readBasePhase(
 		return nil, fmt.Errorf("read base reel generator: %w", err)
 	}
 
+	fillerCoin, err := readHuntFiller(reader, phasePath, general)
+	if err != nil {
+		return nil, fmt.Errorf("read filler hunt: %w", err)
+	}
+
 	lineCalculator := readLineCalculator(general)
 
-	spinPhase := base.NewSpinPhase(dist, gen, lineCalculator)
+	jpWinManager := manager.NewJpCoinWin()
+
+	spinPhase := base.NewSpinPhase(dist, gen, lineCalculator, fillerCoin, jpWinManager)
 
 	return spinPhase, nil
+}
+
+// readHuntFiller reads the jackpot hunt coin count weight and constructs the Hunt filler.
+//
+// Parameters:
+//   - reader: CSV file adapter for reading configuration files
+//   - phasePath: path builder pointing to the phase configuration directory
+//   - general: general configuration containing jackpot pairs and type mappings
+//
+// Returns:
+//   - pointer to Hunt filler configured with coin count weights and jackpot data
+//   - error if reading the weight file fails
+func readHuntFiller(
+	reader *reader.Adapter,
+	phasePath *tools.PathBuilder,
+	general *configs.GeneralConfig,
+) (*filler.JpCoins, error) {
+	const jpCoinCountFileName = "jp_coin_count"
+
+	jpHuntCoinCount, err := common.ReadWeight(reader, phasePath.File(jpCoinCountFileName))
+	if err != nil {
+		return nil, fmt.Errorf("read jp hunt coin count weight: %w", err)
+	}
+
+	huntFiller := filler.NewJpCoins(jpHuntCoinCount, general.JackpotPairs, general.JpTypes)
+
+	return huntFiller, nil
 }
 
 // readLineCalculator constructs the line-win calculator from the shared general
@@ -63,7 +100,7 @@ func readBasePhase(
 func readLineCalculator(
 	general *configs.GeneralConfig,
 ) *calculators.Lines {
-	wild := model.Collection{}
+	wild := model.Collection{rules.WildID}
 	skipSymbol := model.Collection{}
 
 	linesCalc := calculators.NewLines(

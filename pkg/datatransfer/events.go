@@ -32,6 +32,8 @@ func transformSingleEvent(curEvent events.Event, betValue uint64) error {
 	switch curEvent.EventType() {
 	case events.WinsType:
 		return transformWinEvent(curEvent, betValue)
+	case events.JackpotWinType:
+		return transformJackpotWinEvent(curEvent, betValue)
 	default:
 		return ErrInvalidEventType
 	}
@@ -54,6 +56,25 @@ func transformWinEvent(curEvent events.Event, betValue uint64) error {
 	for i := range winEvent.Lines {
 		winEvent.Lines[i].Payout *= betValue
 	}
+
+	return nil
+}
+
+// transformJackpotWinEvent scales the jackpot coin value by bet.
+//
+// Parameters:
+//   - curEvent: the event to transform (must be *events.JackpotWinEvent)
+//   - betValue: the player's bet value used to scale the jackpot payout
+//
+// Returns:
+//   - [ErrInvalidEventType] if curEvent is not a *events.JackpotWinEvent
+func transformJackpotWinEvent(curEvent events.Event, betValue uint64) error {
+	jpWinEvent, ok := curEvent.(*events.JackpotWinEvent)
+	if !ok {
+		return ErrInvalidEventType
+	}
+
+	jpWinEvent.Target.Value *= betValue
 
 	return nil
 }

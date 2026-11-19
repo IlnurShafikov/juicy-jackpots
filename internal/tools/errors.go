@@ -14,4 +14,8 @@ var (
 	// ErrEmptyPositions is returned when working with an empty positions slice
 	// when at least one position is expected.
 	ErrEmptyPositions = errors.New("empty positions slice")
+
+	// ErrInvalidArguments is returned when a function receives values that violate
+	// its preconditions, such as non-positive counts or a count exceeding the maximum.
+	ErrInvalidArguments = errors.New("invalid arguments: values must be greater than 0")
 )

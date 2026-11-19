@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/pairs"
 	"github.com/IlnurShafikov/slot-engine/pkg/lines"
 	"github.com/IlnurShafikov/slot-engine/pkg/paytable"
 )
@@ -13,6 +14,12 @@ type GeneralConfig struct {
 
 	// Multipliers contains various multiplier configurations (cost, max win, etc.)
 	Multipliers *MultipliersConfigs
+
+	// JackpotPairs pairs coin count to their payout multipliers.
+	JackpotPairs pairs.Pairs
+
+	// JpTypes maps each jackpot value to its corresponding jackpot type identifier.
+	JpTypes map[uint64]int
 
 	// SymbolsOnReels is the number of visible symbol rows per reel.
 	SymbolsOnReels []int

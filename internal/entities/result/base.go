@@ -3,6 +3,7 @@
 package result
 
 import (
+	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/coin"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result/events"
 	"github.com/IlnurShafikov/slot-engine/pkg/model"
 )
@@ -13,6 +14,9 @@ import (
 type Base struct {
 	// Board stores the game board configuration/state after the spin
 	Board model.Board
+
+	// CoinsResult holds the jackpot hunt coin placement outcome for this spin.
+	CoinsResult *coin.Result
 
 	// events store all events that occurred during this spin
 	events []events.Event
@@ -31,6 +35,7 @@ type Base struct {
 func NewBase() *Base {
 	return &Base{
 		Board:         nil,
+		CoinsResult:   nil,
 		events:        nil,
 		totalWin:      0,
 		maxWinReached: false,
