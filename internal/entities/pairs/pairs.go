@@ -1,21 +1,26 @@
+// Package pairs provides a simple ordered key-value list of integers
+// that is read from configuration files.
 package pairs
 
-// Pair holds a single integer key-value association parsed from a CSV row.
+// Pair is a single key-value entry.
 type Pair struct {
-	Key   int
+	// Key is the entry identifier (for example a symbol ID).
+	Key int
+	// Value is the value associated with the key.
 	Value int
 }
 
-// Pairs is an ordered slice of Pair entries. Linear search is used for all
-// lookups, which is acceptable given the small sizes typical in game configs.
+// Pairs is an ordered list of key-value entries.
 type Pairs []Pair
 
-// GetValueByKey performs a linear search and returns the Value of the first
-// Pair whose Key equals key.
+// GetValueByKey returns the value of the first entry with the given key.
+//
+// Parameters:
+//   - key: key to search for
 //
 // Returns:
-//   - the matching value and true if found
-//   - 0 and false if no Pair has the given key
+//   - value of the entry
+//   - true if the key was found, false otherwise
 func (kv Pairs) GetValueByKey(key int) (int, bool) {
 	for i := range kv {
 		curr := kv[i]
@@ -28,12 +33,14 @@ func (kv Pairs) GetValueByKey(key int) (int, bool) {
 	return 0, false
 }
 
-// GetIDByValue performs a linear search and returns the Key of the first
-// Pair whose Value equals value. Useful for reverse-lookup of jackpot type IDs.
+// GetIDByValue returns the key of the first entry with the given value.
+//
+// Parameters:
+//   - value: value to search for
 //
 // Returns:
-//   - the matching key and true if found
-//   - 0 and false if no Pair has the given value
+//   - key of the entry
+//   - true if the value was found, false otherwise
 func (kv Pairs) GetIDByValue(value int) (int, bool) {
 	for i := range kv {
 		curr := kv[i]
@@ -46,11 +53,14 @@ func (kv Pairs) GetIDByValue(value int) (int, bool) {
 	return 0, false
 }
 
-// GetByIndex returns the Pair at the given zero-based index.
+// GetByIndex returns the entry at the given position.
+//
+// Parameters:
+//   - index: zero-based position in the list
 //
 // Returns:
-//   - the Pair and true if index is within bounds
-//   - a zero-value Pair and false if index is negative or >= len(kv)
+//   - entry at the position
+//   - false if the index is out of range
 func (kv Pairs) GetByIndex(index int) (Pair, bool) {
 	if index < 0 || index >= len(kv) {
 		return Pair{Key: 0, Value: 0}, false

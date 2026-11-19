@@ -7,9 +7,10 @@ import (
 	"encoding/json"
 	"fmt"
 
+	jsoniter "github.com/json-iterator/go"
+
 	"github.com/IlnurShafikov/juicy-jackpots/internal/configs"
 	"github.com/IlnurShafikov/slot-engine/pkg/paytable"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // Rules represents the complete game rules sent to the client.

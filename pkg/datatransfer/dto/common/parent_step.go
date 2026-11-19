@@ -7,6 +7,7 @@ type ParentStep struct {
 	Payload ParentPayload `json:"payload"`
 }
 
+// ParentPayload contains the data of the parent phase step.
 type ParentPayload struct {
 	// Counter indicates the number of free spins or respins triggered (if any)
 	Counter *Counter `json:"counter,omitempty"`

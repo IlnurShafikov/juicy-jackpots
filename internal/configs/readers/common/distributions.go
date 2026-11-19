@@ -12,19 +12,19 @@ import (
 // Distributions define the weighted probabilities for symbols appearing on reels.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - phasePath: path builder pointing to the game phase configuration directory
 //
 // Returns:
 //   - pointer to Distributions containing weighted symbol distributions
 //   - error if reading or parsing fails
 func ReadDistributions(
-	reader *reader.Adapter,
+	csvReader *reader.Adapter,
 	phasePath *tools.PathBuilder,
 ) (*weight.Weights, error) {
 	const fileName = "distributions"
 
-	data, err := reader.ReadCSV(phasePath.File(fileName))
+	data, err := csvReader.ReadCSV(phasePath.File(fileName))
 	if err != nil {
 		return nil, fmt.Errorf("read distributions data: %w", err)
 	}

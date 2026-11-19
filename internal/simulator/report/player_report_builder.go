@@ -9,12 +9,15 @@ import (
 )
 
 const (
+	// PlayerTableSeparator separates the columns of the player table.
 	PlayerTableSeparator = " | "
-	PlayerTablePadding   = " "
+	// PlayerTablePadding is the padding added around column values.
+	PlayerTablePadding = " "
 )
 
 // PlayerReportBuilder builds player simulation reports
 type PlayerReportBuilder struct {
+	// builder accumulates the report text.
 	builder strings.Builder
 }
 

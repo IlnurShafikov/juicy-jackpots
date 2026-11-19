@@ -20,45 +20,45 @@ const (
 // It reads the paytable and multipliers from CSV files in the general directory.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //
 // Returns:
 //   - pointer to GeneralConfig containing paytable and multipliers
 //   - error if reading or parsing fails
-func Read(reader *reader.Adapter) (*configs.GeneralConfig, error) {
+func Read(csvReader *reader.Adapter) (*configs.GeneralConfig, error) {
 	generalPath := tools.NewPathBuilder(generalPrefix)
 
-	paytable, err := common.ReadPaytable(reader, generalPath)
+	paytable, err := common.ReadPaytable(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read paytable: %w", err)
 	}
 
-	symbolsOnReel, err := common.ReadIntSlices(reader, generalPath.File(symbolOnReelName))
+	symbolsOnReel, err := common.ReadIntSlices(csvReader, generalPath.File(symbolOnReelName))
 	if err != nil {
 		return nil, fmt.Errorf("read symbols on reel: %w", err)
 	}
 
-	winLines, err := common.ReadLines(reader, generalPath)
+	winLines, err := common.ReadLines(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read win lines: %w", err)
 	}
 
-	jpPairs, err := common.ReadJackpotPairs(reader, generalPath)
+	jpPairs, err := common.ReadJackpotPairs(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read jackpot pairs: %w", err)
 	}
 
-	jpTypes, err := common.ReadJpTypes(reader, generalPath)
+	jpTypes, err := common.ReadJpTypes(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read jp types: %w", err)
 	}
 
-	multipliers, err := common.ReadMultipliers(reader, generalPath)
+	multipliers, err := common.ReadMultipliers(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read multipliers: %w", err)
 	}
 
-	volatility, err := common.ReadVolatility(reader, generalPath)
+	volatility, err := common.ReadVolatility(csvReader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read volatility: %w", err)
 	}

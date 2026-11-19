@@ -1,3 +1,4 @@
+// Package manager contains the components that turn game results into wins.
 package manager
 
 import (
@@ -7,13 +8,13 @@ import (
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result/events"
 )
 
-// JpCoinWin handles the win calculation and event emission for a collected jackpot coin.
+// JpCoinWin handles the win calculation and event emission for the jackpot coins of a spin.
 type JpCoinWin struct{}
 
-// NewJpCoinWin creates a JackpotWin manager.
+// NewJpCoinWin creates a JpCoinWin manager.
 //
 // Returns:
-//   - pointer to a new JackpotWin
+//   - pointer to a new JpCoinWin
 func NewJpCoinWin() *JpCoinWin { return &JpCoinWin{} }
 
 // Calculate applies the jackpot coin win to the win limiter and emits a JackpotWin event.

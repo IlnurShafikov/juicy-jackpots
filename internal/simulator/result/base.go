@@ -5,14 +5,20 @@ type BaseGame struct {
 	// TotalWins is the sum of all win amounts from base game spins.
 	TotalWins uint64
 	// LineWins is the cumulative win amount attributed to line wins only.
-	LineWins      uint64
-	CoinWins      uint64
+	LineWins uint64
+	// CoinWins is the cumulative jackpot prize amount won by the coins.
+	CoinWins uint64
+	// CoinWinsCount is the number of spins that won a jackpot prize.
 	CoinWinsCount uint64
 }
 
+// newBaseGame creates a BaseGame with zeroed statistics.
 func newBaseGame() *BaseGame {
 	return &BaseGame{
-		TotalWins: 0,
+		TotalWins:     0,
+		LineWins:      0,
+		CoinWins:      0,
+		CoinWinsCount: 0,
 	}
 }
 
@@ -29,6 +35,10 @@ func (b *BaseGame) AddLineWins(lineWins uint64) {
 	b.LineWins += lineWins
 }
 
+// AddCoinWins adds a jackpot prize to the coin win total and counts the win.
+//
+// Parameters:
+//   - coinWins: jackpot prize amount of the current round
 func (b *BaseGame) AddCoinWins(coinWins uint64) {
 	b.CoinWins += coinWins
 	b.CoinWinsCount++

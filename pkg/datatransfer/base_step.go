@@ -3,21 +3,22 @@ package datatransfer
 import (
 	"fmt"
 
+	"github.com/google/uuid"
+	jsoniter "github.com/json-iterator/go"
+
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result/events"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/rules"
 	baseDto "github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/base"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/common"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/step"
-	"github.com/google/uuid"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // TransformBaseStep transforms a base game result into a client-facing step.
 // It converts the internal base result into a DTO and adds it to the steps collection.
 //
 // Parameters:
-//   - step: the base game result to transform
+//   - baseRes: the base game result to transform
 //   - cost: the cost of this spin
 //   - bet: the player's bet amount
 //   - allCliSteps: accumulated list of client steps
@@ -27,9 +28,9 @@ import (
 //   - total win amount (including this step)
 //   - error if transformation fails
 func (t *Transfer) TransformBaseStep(
-	step *result.Base, allCliSteps []*step.Step, cost, bet uint64,
+	baseRes *result.Base, allCliSteps []*step.Step, cost, bet uint64,
 ) ([]*step.Step, uint64, error) {
-	clientStep, err := buildBaseStep(step, cost, bet, 0, 0)
+	clientStep, err := buildBaseStep(baseRes, cost, bet, 0, 0)
 	if err != nil {
 		return nil, 0, fmt.Errorf("build base step: %w", err)
 	}
@@ -54,7 +55,7 @@ func (t *Transfer) TransformBaseStep(
 // (symbols, events, wins) into a structured DTO that will be serialized and sent to the client.
 //
 // Parameters:
-//   - step: the internal base game result containing all game state
+//   - baseRes: the internal base game result containing all game state
 //   - cost: the cost of this spin (usually equal to bet)
 //   - betValue: the player's bet amount used to calculate monetary values
 //   - initFsCount: number of free spins triggered by this step (0 if none)
@@ -64,22 +65,22 @@ func (t *Transfer) TransformBaseStep(
 //   - pointer to baseDto.Step containing all transformed data
 //   - error if any transformation fails
 func buildBaseStep(
-	step *result.Base, cost, betValue uint64, initFsCount, initRsCount uint32,
+	baseRes *result.Base, cost, betValue uint64, initFsCount, initRsCount uint32,
 ) (*baseDto.Step, error) {
 	// Transform the initial board state before any modifications
-	symbols, err := TransformSymbols(step.Board, betValue)
+	symbols, err := TransformSymbols(baseRes.Board, betValue)
 	if err != nil {
 		return nil, fmt.Errorf("transform before symbols: %w", err)
 	}
 
 	// Extract and transform all game events (wins, triggers, features, etc.)
-	eventList, err := ExtractAndTransformEvents(step, betValue)
+	eventList, err := ExtractAndTransformEvents(baseRes, betValue)
 	if err != nil {
 		return nil, fmt.Errorf("transform events: %w", err)
 	}
 
 	// Calculate the total win by multiplying base result by bet value
-	totalWin := step.TotalWin() * betValue
+	totalWin := baseRes.TotalWin() * betValue
 
 	// Build the payload containing all game state information
 	payload := buildBasePayload(eventList, symbols, nil, initFsCount, initRsCount)
@@ -91,7 +92,7 @@ func buildBaseStep(
 		StepWin:       totalWin, // For base spins, step win equals total win
 		Cost:          cost,
 		Type:          rules.Step_TYPE_BASE_SPIN,
-		MaxWinReached: step.MaxWinReached(),
+		MaxWinReached: baseRes.MaxWinReached(),
 	}, nil
 }
 

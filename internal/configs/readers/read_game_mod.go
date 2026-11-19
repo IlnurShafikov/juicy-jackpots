@@ -21,6 +21,7 @@ const (
 
 // gameModsData holds all game mode configurations for a specific RTP version.
 type gameModsData struct {
+	// simple is the simple (single bet) game mode.
 	simple *game.Mod
 }
 

@@ -6,15 +6,19 @@ import (
 	"github.com/IlnurShafikov/slot-engine/pkg/tools/simtools"
 )
 
+// xiSquaring is the power to which every RTP value is raised for the variance.
 const xiSquaring = 2
 
 // Xi accumulates squared RTP values for volatility calculation.
 // Kept internal to simulator/result so it can expose Sum for parallel merge.
 type Xi struct {
+	// roundCost is the cost of one round, used to convert a win to RTP.
 	roundCost uint64
-	sum       float64
+	// sum is the accumulated sum of squared RTP values.
+	sum float64
 }
 
+// newXi creates an Xi accumulator for the given round cost.
 func newXi(roundCost uint64) *Xi {
 	return &Xi{roundCost: roundCost, sum: 0}
 }

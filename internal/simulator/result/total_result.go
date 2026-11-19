@@ -9,11 +9,16 @@ type Result struct {
 	// BaseWinRanges tracks the distribution of base-phase total wins.
 	BaseWinRanges *WinRanges
 
+	// base accumulates base game statistics.
 	base *BaseGame
 
-	positiveBets  *PositiveBets
-	xi            *Xi
-	maxTotalWin   uint64
+	// positiveBets counts rounds with any win.
+	positiveBets *PositiveBets
+	// xi accumulates squared RTP values for the volatility calculation.
+	xi *Xi
+	// maxTotalWin is the largest total win of a single round.
+	maxTotalWin uint64
+	// maxWinReached is the number of rounds that hit the max win limit.
 	maxWinReached uint64
 }
 

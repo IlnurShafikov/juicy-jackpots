@@ -4,11 +4,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/IlnurShafikov/juicy-jackpots/internal/configs/readers"
-	"github.com/IlnurShafikov/juicy-jackpots/internal/tools/rngtest"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/IlnurShafikov/juicy-jackpots/internal/configs/readers"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/tools/rngtest"
 )
 
 func TestReadGameMods(t *testing.T) {

@@ -6,12 +6,12 @@ import (
 )
 
 // TransformSymbols converts the internal game board representation into client DTO symbols.
-// This function should be implemented to transform your game's board structure into
+// The board is converted cell by cell, reel by reel, into
 // an array of Symbol DTOs that will be sent to the client.
 //
 // Parameters:
-//   - gameBoard: the internal game board (type depends on your implementation)
-//   - betValue: the player's bet value (may be needed for property calculations)
+//   - gameBoard: the internal game board
+//   - betValue: the player's bet value (not used, symbols have no properties)
 //
 // Returns:
 //   - slice of Symbol DTOs representing the board

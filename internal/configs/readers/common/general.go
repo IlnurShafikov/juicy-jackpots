@@ -14,7 +14,7 @@ import (
 // The paytable defines symbol payouts and count ranges for winning combinations.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - generalPath: path builder pointing to the general configuration directory
 //
 // Returns:
@@ -43,7 +43,7 @@ func ReadPaytable(
 // pairs.Pairs  that associates each coin count with its payout multiplier.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - generalPath: path builder pointing to the general configuration directory
 //
 // Returns:
@@ -72,13 +72,15 @@ func ReadJackpotPairs(
 // This configuration maps jackpot values to their corresponding jackpot type identifiers.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - generalPath: path builder pointing to the general configuration directory
 //
 // Returns:
 //   - map where keys are jackpot values (uint64) and values are jackpot type IDs (int)
 //   - error if reading or parsing fails
-func ReadJpTypes(csvReader *reader.Adapter, generalPath *tools.PathBuilder) (map[uint64]int, error) {
+func ReadJpTypes(
+	csvReader *reader.Adapter, generalPath *tools.PathBuilder,
+) (map[uint64]int, error) {
 	const fileName = "jp_types"
 
 	data, err := csvReader.ReadCSV(generalPath.File(fileName))

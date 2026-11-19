@@ -4,13 +4,14 @@ package datatransfer
 import (
 	"fmt"
 
+	jsoniter "github.com/json-iterator/go"
+
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/rules"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/game"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/base"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/common"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/step"
 	"github.com/IlnurShafikov/slot-engine/pkg/model"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // GetEnterResult creates the initial game load result sent to the client.
@@ -122,10 +123,11 @@ func initialPayload(clientSymbols []*common.Symbol) base.Payload {
 	}
 }
 
+// initBoard returns the fixed board shown to the player before the first spin.
 func initBoard() model.Board {
 	return model.Board{
-		{rules.Ace, rules.High1, rules.High2},
-		{rules.Jack, rules.King, rules.Med1},
-		{rules.Ace, rules.Queen, rules.Med2},
+		{rules.Low1, rules.High1, rules.High2},
+		{rules.Low4, rules.Low2, rules.Med1},
+		{rules.Low1, rules.Low3, rules.Med2},
 	}
 }

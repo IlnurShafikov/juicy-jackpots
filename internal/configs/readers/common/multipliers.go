@@ -12,7 +12,7 @@ import (
 // It loads the maximum win multiplier and cost multiplier for the simple game mode.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - generalPath: path builder pointing to the general configuration directory
 //
 // Returns:

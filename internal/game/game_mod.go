@@ -10,14 +10,19 @@ import (
 
 // BasePhase defines the interface for base game phase operations
 type BasePhase interface {
+	// Spin executes a single base game spin.
 	Spin(rng model.RNG, winLimiter limiter.WinLimiter) (*result.Base, error)
 }
 
-// Mod represents a complete game modification with base and free spin phases
+// Mod represents a complete game modification: a single base phase that
+// evaluates the line wins and the jackpot coins of every spin
 type Mod struct {
-	baseSpinPhase  BasePhase
+	// baseSpinPhase handles base game spin logic.
+	baseSpinPhase BasePhase
+	// costMultiplier is the multiplier applied to bet values.
 	costMultiplier uint64
-	maxWinLimit    uint64
+	// maxWinLimit is the maximum win amount allowed per round.
+	maxWinLimit uint64
 }
 
 // NewMod creates a new Mod instance with the specified phases and limits

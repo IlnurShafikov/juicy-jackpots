@@ -1,9 +1,9 @@
-// Package coin defines the Result type for jackpot hunt coin placement.
+// Package coin defines the Result type for jackpot coins placement.
 package coin
 
 import "github.com/IlnurShafikov/slot-engine/pkg/model"
 
-// Result holds the outcome of the jackpot hunt coin placement for a single spin.
+// Result holds the outcome of the jackpot coins placement for a single spin.
 type Result struct {
 	// Positions lists the board cells where coins were placed this spin.
 	Positions model.Positions `json:"positions"`
@@ -25,8 +25,8 @@ func NewResult() *Result {
 	}
 }
 
-// Copy returns a shallow copy of the Result.
-// It duplicates all fields but does not deep-copy the Positions slice.
+// Copy returns a copy of the Result.
+// The Positions slice is copied too, so the copy can be changed independently.
 //
 // Returns:
 //   - pointer to a new Result with the same field values

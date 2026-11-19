@@ -15,7 +15,7 @@ type Base struct {
 	// Board stores the game board configuration/state after the spin
 	Board model.Board
 
-	// CoinsResult holds the jackpot hunt coin placement outcome for this spin.
+	// CoinsResult holds the jackpot coins placement outcome for this spin.
 	CoinsResult *coin.Result
 
 	// events store all events that occurred during this spin

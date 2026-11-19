@@ -25,8 +25,9 @@ type RangeData struct {
 //  2. Sums and counts are plain slices indexed by bucket position, eliminating
 //     the per-call string hashing that map[WinRange] keys would incur.
 type WinRanges struct {
-	sums       []uint64 // cumulative win sum per bucket, index matches rangesList
-	counts     []int    // number of wins per bucket, index matches rangesList
+	sums   []uint64 // cumulative win sum per bucket, index matches rangesList
+	counts []int    // number of wins per bucket, index matches rangesList
+	// rangesList holds the buckets sorted by lower bound.
 	rangesList []WinRange
 }
 
@@ -133,6 +134,14 @@ func (w *WinRanges) findWinRangeIdx(win uint64) int {
 	return -1
 }
 
+// generateWinRanges builds the win buckets scaled by the cost multiplier.
+// The first bucket captures zero wins, the rest follow the predefined multiplier bounds.
+//
+// Parameters:
+//   - costMultiplier: cost multiplier of the game mode
+//
+// Returns:
+//   - list of buckets sorted by lower bound
 func generateWinRanges(costMultiplier int) []WinRange {
 	// The first bucket is special: it captures the exact zero-win case.
 	ranges := []WinRange{
@@ -160,10 +169,12 @@ func generateWinRanges(costMultiplier int) []WinRange {
 	return ranges
 }
 
+// formatRangeName returns the label of a bucket, e.g. "[1x-2x)".
 func formatRangeName(minimum, maximum float64) string {
 	return fmt.Sprintf("[%vx-%vx)", formatMultiplier(minimum), formatMultiplier(maximum))
 }
 
+// formatMultiplier formats a multiplier without trailing zeros, e.g. 2.50 becomes "2.5".
 func formatMultiplier(val float64) string {
 	if val == float64(int(val)) {
 		return strconv.Itoa(int(val))
