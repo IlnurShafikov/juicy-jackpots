@@ -16,8 +16,7 @@ type (
 // TODO: Add other event types here if needed
 const (
 	// WinsType represents a win event containing line wins or scatter wins
-	WinsType        Type = "wins"
-	WinType         Type = "win"
-	JpTransformType Type = "jpTransform"
-	DoubleWins      Type = "doubleWins"
+	WinsType Type = "wins"
+	// JackpotWinType represents a jackpot win event with jackpot coin collection.
+	JackpotWinType Type = "jackpotWin"
 )

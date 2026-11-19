@@ -6,7 +6,10 @@ import (
 	"fmt"
 
 	"github.com/IlnurShafikov/juicy-jackpots/internal/components/collectors"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/components/filler"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/components/limiter"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/components/manager"
+	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/coin"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result/events"
 	"github.com/IlnurShafikov/slot-engine/pkg/calculators"
@@ -25,6 +28,12 @@ type SpinPhase struct {
 	dist *weight.Weights
 
 	calc *calculators.Lines
+
+	// jpCoinFiller places coin tokens on the board for the jackpot hunt feature
+	jpCoinFiller *filler.JpCoins
+
+	// jpCoinWinManager evaluates coin results and emits jackpot win events
+	jpCoinWinManager *manager.JpCoinWin
 }
 
 // NewSpinPhase creates a new base game spin phase with the specified components.
@@ -39,11 +48,15 @@ func NewSpinPhase(
 	dist *weight.Weights,
 	gen *generator.Generator,
 	calc *calculators.Lines,
+	jpCoinFiller *filler.JpCoins,
+	jpCoinWinManager *manager.JpCoinWin,
 ) *SpinPhase {
 	return &SpinPhase{
-		dist: dist,
-		gen:  gen,
-		calc: calc,
+		dist:             dist,
+		gen:              gen,
+		calc:             calc,
+		jpCoinFiller:     jpCoinFiller,
+		jpCoinWinManager: jpCoinWinManager,
 	}
 }
 
@@ -74,12 +87,18 @@ func (b *SpinPhase) Spin(
 		return nil, fmt.Errorf("generate board: %w", err)
 	}
 
-	totalWin, err := b.processWin(board, eventer, winLimiter)
+	coinRes, err := b.jpCoinFiller.Fill(rng, board)
+	if err != nil {
+		return nil, fmt.Errorf("fill coins: %w", err)
+	}
+
+	totalWin, err := b.processWin(board, coinRes, eventer, winLimiter)
 	if err != nil {
 		return nil, fmt.Errorf("process win: %w", err)
 	}
 
 	res.Board = board
+	res.CoinsResult = coinRes
 	res.SetTotalWin(totalWin)
 	res.SetMaxWinReached(winLimiter.MaxWinReached())
 	res.SetEvents(eventer.Get())
@@ -101,6 +120,7 @@ func (b *SpinPhase) Spin(
 //   - error if line calculation or event creation fails
 func (b *SpinPhase) processWin(
 	board model.Board,
+	coinRes *coin.Result,
 	eventer *collectors.EventsCollector,
 	winLimiter limiter.WinLimiter,
 ) (uint64, error) {
@@ -111,8 +131,6 @@ func (b *SpinPhase) processWin(
 		return 0, fmt.Errorf("calculate win lines: %w", err)
 	}
 
-	totalWin := calculateWinAmount(lineWins)
-
 	if len(lineWins) != 0 {
 		lineWinEvent, err := events.NewLineWinsEvent(lineWins)
 		if err != nil {
@@ -122,25 +140,7 @@ func (b *SpinPhase) processWin(
 		eventer.Add(lineWinEvent)
 	}
 
-	if winLimiter.MaxWinReached() {
-		return winLimiter.TotalWin(), nil
-	}
+	b.jpCoinWinManager.Calculate(coinRes, winLimiter, eventer)
 
-	return totalWin, nil
-}
-
-func calculateWinAmount(
-	wins calculators.LineWins,
-) uint64 {
-	if len(wins) == 0 {
-		return 0
-	}
-
-	var totalWin uint64
-
-	for _, win := range wins {
-		totalWin += win.Payout
-	}
-
-	return totalWin
+	return winLimiter.TotalWin(), nil
 }

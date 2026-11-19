@@ -34,15 +34,19 @@ const (
 	SectionSD       = "SD = "
 	SectionVI       = "VI = "
 
-	LabelByWins         = "By anywhere wins = "
-	LabelFreeTriggered  = "Free games triggered = "
-	LabelAllFreeSteps   = "All free game steps = "
-	LabelRetriggers     = "Retriggers = "
-	LabelRetriggerSteps = "Retriggers steps count = "
-	LabelMaxWinCount    = "MaxWin reached count = "
-	LabelMaxTotalWin    = "Max total win = "
-	LabelStepsWithWins  = "Steps with wins = "
-	LabelHitRate        = "Hit rate = "
+	LabelByWins            = "By all wins = "
+	LabelBuyLineWins       = "By line wins = "
+	LabelByCoinWins        = "By coin wins = "
+	LabelByAverageCoinWins = "By average coin wins = "
+	LabelCollectTrigger    = "Jackpot coin wins triggers = "
+	LabelFreeTriggered     = "Free games triggered = "
+	LabelAllFreeSteps      = "All free game steps = "
+	LabelRetriggers        = "Retriggers = "
+	LabelRetriggerSteps    = "Retriggers steps count = "
+	LabelMaxWinCount       = "MaxWin reached count = "
+	LabelMaxTotalWin       = "Max total win = "
+	LabelStepsWithWins     = "Steps with wins = "
+	LabelHitRate           = "Hit rate = "
 
 	TitleBaseWinRanges = "Only Base Phase TotalWin ranges"
 	TitleFreeWinRanges = "Only Free Phase TotalWin ranges"
@@ -155,7 +159,14 @@ func (rb *Builder) writeBaseGameSection(config Config, baseRes *result.BaseGame)
 	rb.addSection()
 
 	baseRTP := simtools.CalculateRTP(config.TotalBet, baseRes.GetWins())
+	lineWinRTP := simtools.CalculateRTP(config.TotalBet, baseRes.LineWins)
+	coinWinRTP := simtools.CalculateRTP(config.TotalBet, baseRes.CoinWins)
+	coinWinAverage := simtools.CalculateRTP(baseRes.CoinWinsCount, baseRes.CoinWins)
 
+	rb.addTabLine(LabelBuyLineWins + simtools.Float64ToString(lineWinRTP))
+	rb.addTabLine(LabelByCoinWins + simtools.Float64ToString(coinWinRTP))
+	rb.addTabLine(LabelCollectTrigger + simtools.Uint64ToString(baseRes.CoinWinsCount))
+	rb.addTabLine(LabelByAverageCoinWins + simtools.Float64ToString(coinWinAverage))
 	rb.addLine(SectionBaseRTP + simtools.Float64ToString(baseRTP))
 	rb.addTabLine(LabelByWins + simtools.Float64ToString(baseRTP))
 }

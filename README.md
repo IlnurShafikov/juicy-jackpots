@@ -1,1 +1,1 @@
-# juicy_jackpots
+# juicy-jackpots

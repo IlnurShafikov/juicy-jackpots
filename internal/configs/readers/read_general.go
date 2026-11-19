@@ -43,6 +43,16 @@ func Read(reader *reader.Adapter) (*configs.GeneralConfig, error) {
 		return nil, fmt.Errorf("read win lines: %w", err)
 	}
 
+	jpPairs, err := common.ReadJackpotPairs(reader, generalPath)
+	if err != nil {
+		return nil, fmt.Errorf("read jackpot pairs: %w", err)
+	}
+
+	jpTypes, err := common.ReadJpTypes(reader, generalPath)
+	if err != nil {
+		return nil, fmt.Errorf("read jp types: %w", err)
+	}
+
 	multipliers, err := common.ReadMultipliers(reader, generalPath)
 	if err != nil {
 		return nil, fmt.Errorf("read multipliers: %w", err)
@@ -56,6 +66,8 @@ func Read(reader *reader.Adapter) (*configs.GeneralConfig, error) {
 	return &configs.GeneralConfig{
 		PayTable:       paytable,
 		Multipliers:    multipliers,
+		JackpotPairs:   jpPairs,
+		JpTypes:        jpTypes,
 		SymbolsOnReels: symbolsOnReel,
 		WinLines:       winLines,
 		Volatility:     volatility,
