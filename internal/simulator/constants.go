@@ -2,7 +2,7 @@ package simulator
 
 const (
 	// DefaultRTPVersion is the default RTP version used when none is specified via CLI flags.
-	DefaultRTPVersion = 96
+	DefaultRTPVersion = 90
 
 	// DefaultSpinsCount is the default number of spins in a simulation run.
 	DefaultSpinsCount = 1000_000_000
