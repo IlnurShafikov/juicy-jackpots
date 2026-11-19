@@ -9,6 +9,12 @@ import (
 const (
 	// RTP96 represents the 96% RTP version
 	RTP96 = 96
+	// RTP94 represents the 94% RTP version
+	RTP94 = 94
+	// RTP92 represents the 92% RTP version
+	RTP92 = 92
+	// RTP90 represents the 90% RTP version
+	RTP90 = 90
 )
 
 // getSupportedRTPVersions returns a list of all supported RTP versions.
@@ -17,8 +23,7 @@ const (
 //   - slice of integers representing supported RTP percentages
 func getSupportedRTPVersions() []int {
 	return []int{
-		RTP96,
-		// TODO: add other RTP versions
+		RTP96, RTP94, RTP92, RTP90,
 	}
 }
 

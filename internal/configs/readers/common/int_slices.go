@@ -11,17 +11,17 @@ import (
 // as a flat int slice. Used to load symbol counts, coin values, and reel indexes.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - filePath: absolute path within the embedded FS to the target CSV file
 //
 // Returns:
 //   - int slice with one element per non-empty CSV cell
 //   - error if the file cannot be read or any value cannot be parsed as an integer
 func ReadIntSlices(
-	reader *reader.Adapter,
+	csvReader *reader.Adapter,
 	filePath string,
 ) ([]int, error) {
-	data, err := reader.ReadCSV(filePath)
+	data, err := csvReader.ReadCSV(filePath)
 	if err != nil {
 		return nil, fmt.Errorf("read symbols on data: %w", err)
 	}

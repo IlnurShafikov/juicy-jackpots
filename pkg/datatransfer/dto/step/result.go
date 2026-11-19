@@ -1,7 +1,9 @@
+// Package step contains the DTOs of game steps and bet results sent to the client.
 package step
 
 import "encoding/json"
 
+// Step is a single step of a game round as it is sent to the client.
 type Step struct {
 	Id             []byte `json:"id"`                   // Unique step identifier
 	ClientResponse []byte `json:"clientResponse"`       // JSON payload with complete game state
@@ -13,15 +15,24 @@ type Step struct {
 	MaxWinReached  bool   `json:"maxWinReached"`        // Whether max win limit was hit
 }
 
+// BetResult is the result of a bet: all steps of the round and its metadata.
 type BetResult struct {
-	Steps          []*Step `json:"steps"`
-	UserBet        uint64  `json:"userBet"`
-	CostMultiplier uint64  `json:"costMultiplier"`
-	Seed           int64   `json:"seed"`
+	// Steps contains all steps of the round in the order they are played.
+	Steps []*Step `json:"steps"`
+	// UserBet is the bet amount placed by the player.
+	UserBet uint64 `json:"userBet"`
+	// CostMultiplier is the multiplier applied to the bet to get the round cost.
+	CostMultiplier uint64 `json:"costMultiplier"`
+	// Seed is the RNG seed of the round (for replay and verification).
+	Seed int64 `json:"seed"`
 }
 
+// LoadGameResult is the response to the game load request.
 type LoadGameResult struct {
-	GameRules      json.RawMessage `json:"rules"`
-	Step           *Step           `json:"step"`
-	CostMultiplier uint64          `json:"costMultiplier"`
+	// Step is the initial step shown to the player.
+	Step *Step `json:"step"`
+	// GameRules contains the game rules as raw JSON.
+	GameRules json.RawMessage `json:"rules"`
+	// CostMultiplier is the multiplier applied to the bet to get the round cost.
+	CostMultiplier uint64 `json:"costMultiplier"`
 }

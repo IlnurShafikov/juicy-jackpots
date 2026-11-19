@@ -3,9 +3,11 @@ package result
 // PositiveBets counts rounds where the player won anything.
 // Kept internal to simulator/result so it can expose AddN for parallel merge.
 type PositiveBets struct {
+	// spins is the number of rounds with a win.
 	spins int
 }
 
+// newPositiveBets creates a PositiveBets counter set to zero.
 func newPositiveBets() *PositiveBets { return &PositiveBets{spins: 0} }
 
 // Add records one positive-bet round.

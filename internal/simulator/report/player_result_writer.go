@@ -14,8 +14,10 @@ import (
 )
 
 const (
+	// PlayerOutputFileExtension is the extension of the player report file.
 	PlayerOutputFileExtension = ".txt"
-	PlayerPathPrefix          = "player_simulation"
+	// PlayerPathPrefix is the file name prefix of the player report.
+	PlayerPathPrefix = "player_simulation"
 )
 
 // PlayerResultsWriter handles writing player simulation results to files

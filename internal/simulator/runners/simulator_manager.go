@@ -25,9 +25,13 @@ import (
 
 // SimulationManager orchestrates the entire simulation process
 type SimulationManager struct {
-	gameModFinder       *simulator.GameModFinder
-	resultsWriter       *report.ResultsWriter
-	interactiveRunner   *InteractiveRunner
+	// gameModFinder looks up the game mod of the requested RTP version.
+	gameModFinder *simulator.GameModFinder
+	// resultsWriter writes the simulation report.
+	resultsWriter *report.ResultsWriter
+	// interactiveRunner runs the step-by-step interactive mode.
+	interactiveRunner *InteractiveRunner
+	// playerResultsWriter writes the player simulation report.
 	playerResultsWriter *report.PlayerResultsWriter
 }
 

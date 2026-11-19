@@ -13,8 +13,10 @@ import (
 
 // SimulationRunner handles the execution of simulation with progress tracking
 type SimulationRunner struct {
+	// progressBar reports the simulation progress.
 	progressBar *result.Progress
-	rngPool     *rngtest.Mt19937
+	// rngPool is the random number generator used by the simulation.
+	rngPool *rngtest.Mt19937
 }
 
 // NewSimulationRunner creates a new SimulationRunner with progress bar

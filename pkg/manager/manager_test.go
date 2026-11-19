@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/require"
+
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/result"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/rules"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/step"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/manager"
-	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -63,7 +64,6 @@ func TestEnterGame(t *testing.T) {
 
 // TestAllGameMods tests all game to ensure they can be processed without errors.
 func TestAllGameMods(t *testing.T) {
-
 	gameManager, err := manager.NewGameManager()
 	require.NoError(t, err)
 

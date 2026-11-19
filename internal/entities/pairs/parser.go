@@ -5,16 +5,15 @@ import (
 	"strconv"
 )
 
-// Parse converts raw CSV rows into a Pairs slice.
-// Each row must have at least two columns: key (integer) and value (integer).
+// Parse converts CSV rows into pairs. The first column of a row is the key,
+// the second one is the value; extra columns are ignored.
 //
 // Parameters:
-//   - data: raw CSV content as a 2-D string slice, one row per pair
+//   - data: CSV rows, each with at least two integer columns
 //
 // Returns:
-//   - Pairs with one entry per row
-//   - [ErrInvalidData] if a row has fewer than two columns, or a parse error
-//     if any column is not a valid integer
+//   - parsed pairs in the order of the rows
+//   - error if a row is too short or contains a non-integer value
 func Parse(data [][]string) (Pairs, error) {
 	const minLength = 2
 

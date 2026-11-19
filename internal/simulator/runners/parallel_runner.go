@@ -27,8 +27,10 @@ const (
 // steps apart from its neighbours, guaranteeing non-overlapping random streams.
 // Reproducibility holds for identical (mainSeed, workersCount) pairs.
 type parallelRunner struct {
+	// progressBar reports the overall progress of all workers.
 	progressBar *result.Progress
-	numWorkers  int
+	// numWorkers is the number of parallel goroutines.
+	numWorkers int
 }
 
 // NewParallelRunner creates a parallelRunner for the given spin count and worker count.

@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	// InputDelimiter is the byte that ends a line of user input.
 	InputDelimiter = '\n'
 )
 
@@ -31,6 +32,7 @@ const (
 
 // InteractiveRunner handles interactive simulation execution
 type InteractiveRunner struct {
+	// reader reads the user input from stdin.
 	reader *bufio.Reader
 }
 

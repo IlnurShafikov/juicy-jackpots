@@ -1,3 +1,5 @@
+// Package rngtest provides a deterministic Mersenne Twister based random number
+// generator that is used by the simulator and tests only.
 package rngtest
 
 import (
@@ -18,12 +20,20 @@ const (
 	smShift3    = 31 // SplitMix64 final shift
 )
 
+// Mt19937 is a goroutine-safe random number generator based on the Mersenne Twister.
 type Mt19937 struct {
+	// rand is the underlying random source.
 	rand *rand.Rand
-	mu   *sync.Mutex
+	// mu guards rand and seed.
+	mu *sync.Mutex
+	// seed is the last seed that was set.
 	seed int64
 }
 
+// Reseed sets a new seed and restarts the random sequence.
+//
+// Parameters:
+//   - seed: new seed value
 func (m *Mt19937) Reseed(seed int64) {
 	m.rand.Seed(seed) //nolint:staticcheck // existing API, kept for backward compat
 	m.seed = seed
@@ -43,6 +53,7 @@ func New() *Mt19937 {
 	}
 }
 
+// int returns a non-negative pseudo-random int under the mutex.
 func (m *Mt19937) int() int {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -50,6 +61,15 @@ func (m *Mt19937) int() int {
 	return m.rand.Int()
 }
 
+// ShiftUint32 maps a raw random value into the inclusive range [minVal, maxVal].
+//
+// Parameters:
+//   - got: raw random value
+//   - minVal: lower bound of the range (inclusive)
+//   - maxVal: upper bound of the range (inclusive)
+//
+// Returns:
+//   - value in the range [minVal, maxVal]
 func ShiftUint32(got, minVal, maxVal uint32) uint32 {
 	if got == 0 && minVal == 0 {
 		return 0
@@ -58,6 +78,15 @@ func ShiftUint32(got, minVal, maxVal uint32) uint32 {
 	return got%(maxVal-minVal+1) + minVal
 }
 
+// Random returns a pseudo-random number in the inclusive range [minVal, maxVal].
+// It returns 0 when both bounds are 0.
+//
+// Parameters:
+//   - minVal: lower bound of the range (inclusive)
+//   - maxVal: upper bound of the range (inclusive)
+//
+// Returns:
+//   - random value in the range [minVal, maxVal]
 func (m *Mt19937) Random(minVal, maxVal uint32) uint32 {
 	if minVal == 0 && maxVal == 0 {
 		return 0
@@ -66,10 +95,12 @@ func (m *Mt19937) Random(minVal, maxVal uint32) uint32 {
 	return ShiftUint32(uint32(m.int()), minVal, maxVal) //nolint:gosec // G115: bit-pattern
 }
 
+// Seed returns the last seed that was set.
 func (m *Mt19937) Seed() int64 {
 	return m.seed
 }
 
+// Int64 returns a non-negative pseudo-random 63-bit integer.
 func (m *Mt19937) Int64() int64 {
 	return m.rand.Int63()
 }

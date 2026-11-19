@@ -13,19 +13,19 @@ import (
 // and are shared across all RTP versions and game modes.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - generalPath: path builder pointing to the general configuration directory
 //
 // Returns:
 //   - Lines containing all defined win-line patterns
 //   - error if reading or parsing the CSV file fails
 func ReadLines(
-	reader *reader.Adapter,
+	csvReader *reader.Adapter,
 	generalPath *tools.PathBuilder,
 ) (lines.Lines, error) {
 	const fileName = "win_lines"
 
-	data, err := reader.ReadCSV(generalPath.File(fileName))
+	data, err := csvReader.ReadCSV(generalPath.File(fileName))
 	if err != nil {
 		return nil, fmt.Errorf("read win lines data: %w", err)
 	}

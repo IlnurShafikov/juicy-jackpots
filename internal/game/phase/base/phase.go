@@ -18,7 +18,7 @@ import (
 	"github.com/IlnurShafikov/slot-engine/pkg/weight"
 )
 
-// / SpinPhase represents the base game spin phase with all its components.
+// SpinPhase represents the base game spin phase with all its components.
 // It contains the game mechanics and configurations needed to execute a base spin.
 type SpinPhase struct {
 	// gen produces raw reel boards for a given group ID.
@@ -27,9 +27,10 @@ type SpinPhase struct {
 	// dist define the weighted symbol distributions for reels
 	dist *weight.Weights
 
+	// calc evaluates the line wins on the board.
 	calc *calculators.Lines
 
-	// jpCoinFiller places coin tokens on the board for the jackpot hunt feature
+	// jpCoinFiller places coin tokens on the board for the jackpot coins feature
 	jpCoinFiller *filler.JpCoins
 
 	// jpCoinWinManager evaluates coin results and emits jackpot win events
@@ -40,13 +41,17 @@ type SpinPhase struct {
 //
 // Parameters:
 //   - dist: symbol distributions for the reels
-//   - weightsGroup: weighted value groups for game mechanics
+//   - gen: board generator built from the reel strips
+//   - calc: line wins calculator
+//   - jpCoinFiller: draws the jackpot coins of the spin
+//   - jpCoinWinManager: converts the coins into a jackpot win
 //
 // Returns:
 //   - pointer to a new SpinPhase instance
 func NewSpinPhase(
 	dist *weight.Weights,
 	gen *generator.Generator,
+	// calc evaluates the line wins on the board.
 	calc *calculators.Lines,
 	jpCoinFiller *filler.JpCoins,
 	jpCoinWinManager *manager.JpCoinWin,
@@ -111,9 +116,10 @@ func (b *SpinPhase) Spin(
 // When the win limiter is hit, it returns the capped total immediately.
 //
 // Parameters:
-//   - resp: board result containing the symbol grid and collector state
+//   - board: generated board to evaluate
+//   - coinRes: jackpot coins drawn for this spin
 //   - eventer: event collector that accumulates game events for client delivery
-//   - limiter: win cap enforcing the maximum allowed payout
+//   - winLimiter: win cap enforcing the maximum allowed payout
 //
 // Returns:
 //   - combined total of line wins and coin wins, capped by the limiter if reached

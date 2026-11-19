@@ -1,3 +1,5 @@
+// Package filler contains the components that fill the board with extra tokens,
+// such as the jackpot coins drawn on every spin.
 package filler
 
 import (
@@ -13,9 +15,10 @@ import (
 	"github.com/IlnurShafikov/slot-engine/pkg/weight"
 )
 
-// JpCoins places coins on the board for the jackpot hunt feature.
+// JpCoins draws the jackpot coins of a spin.
 // It draws a random number of coins from a weighted distribution, positions them on
 // randomly selected reels, and assigns a jackpot type and value based on the coin count.
+// Coins are placed independently of the symbols and never change the line wins.
 type JpCoins struct {
 	// coinCount holds the weighted distribution of how many coins to place per spin.
 	coinCount *weight.Weights
@@ -25,7 +28,7 @@ type JpCoins struct {
 	jpPairs pairs.Pairs
 }
 
-// NewJpCoins creates a Hunt filler with coin distribution and jackpot configuration.
+// NewJpCoins creates a JpCoins filler with coin distribution and jackpot configuration.
 //
 // Parameters:
 //   - coinCount: weighted distribution controlling how many coins appear per spin
@@ -33,7 +36,7 @@ type JpCoins struct {
 //   - jpTypes: mapping from jackpot value to jackpot type ID
 //
 // Returns:
-//   - pointer to a new Hunt filler
+//   - pointer to a new JpCoins filler
 func NewJpCoins(
 	coinCount *weight.Weights,
 	jpPairs pairs.Pairs,
@@ -121,7 +124,7 @@ func (h *JpCoins) coinsProperties(coinsRes *coin.Result, coinCount int) error {
 }
 
 // buildCoinPositions assigns a random row to each reel in reels.
-// If a reel has a nudge position the coin is placed on the middle row instead.
+// Every coin gets a uniformly drawn row.
 //
 // Parameters:
 //   - rng: random number generator used to select a row per reel

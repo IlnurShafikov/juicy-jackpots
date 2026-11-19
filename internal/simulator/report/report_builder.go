@@ -73,6 +73,7 @@ type Config struct {
 // GeneralWriter wraps an io.Writer and provides helper methods
 // for writing formatted simulation output.
 type GeneralWriter struct {
+	// writer is the destination of the report text.
 	writer io.Writer
 }
 
@@ -87,6 +88,7 @@ func NewGeneralWriter(writer io.Writer) *GeneralWriter {
 // Builder accumulates formatted simulation report text using a strings.Builder.
 // Call WriteReport to populate it, then GetFormattedReport to retrieve the result.
 type Builder struct {
+	// builder accumulates the report text.
 	builder strings.Builder
 }
 
@@ -214,6 +216,13 @@ func (rb *Builder) writeWinRangesSection(res *result.Result, repCfg Config) {
 	rb.addSection()
 }
 
+// writeWinRangeDetails writes a table of win ranges with count, frequency and RTP.
+//
+// Parameters:
+//   - title: table title
+//   - winRanges: win buckets to print
+//   - stepsCount: number of phases the frequency is calculated against
+//   - totalBet: total bet used for the RTP share of every bucket
 func (rb *Builder) writeWinRangeDetails(
 	title string, winRanges *result.WinRanges, stepsCount int, totalBet uint64,
 ) {

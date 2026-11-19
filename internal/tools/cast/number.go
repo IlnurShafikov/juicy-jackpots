@@ -1,4 +1,3 @@
-//nolint:all // it's ok for cast package
 package cast
 
 import (
@@ -10,8 +9,8 @@ import (
 // predeclared types and types with the same underlying type.
 type Number interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
-	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
-	~float32 | ~float64
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 |
+		~float32 | ~float64
 }
 
 // getMinMax returns the minimum and maximum representable values for a numeric type.
@@ -40,6 +39,8 @@ func getMinMax[T Number]() (minVal, maxVal float64) {
 	return 0, 0
 }
 
+// getSignedMinMax returns the bounds of a signed integer type as float64.
+// It returns (0, 0) for any other type.
 func getSignedMinMax[T Number]() (minVal, maxVal float64) {
 	var zero T
 
@@ -59,6 +60,8 @@ func getSignedMinMax[T Number]() (minVal, maxVal float64) {
 	return 0, 0
 }
 
+// getUnsignedMinMax returns the bounds of an unsigned integer type as float64.
+// It returns (0, 0) for any other type.
 func getUnsignedMinMax[T Number]() (minVal, maxVal float64) {
 	var zero T
 
@@ -78,6 +81,8 @@ func getUnsignedMinMax[T Number]() (minVal, maxVal float64) {
 	return 0, 0
 }
 
+// getFloatMinMax returns the bounds of a floating-point type as float64.
+// It returns (0, 0) for any other type.
 func getFloatMinMax[T Number]() (minVal, maxVal float64) {
 	var zero T
 

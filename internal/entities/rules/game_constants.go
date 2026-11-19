@@ -3,45 +3,48 @@
 package rules
 
 // Symbol ID constants define unique identifiers for each symbol in the game.
-// TODO: implement symbols ids according to your game design
+// The IDs match the strips and the paytable.
 const (
-	// VoidSymbol represents an empty or null symbol position
+	// VoidSymbol represents an empty or null symbol position (reserved, not used on the strips)
 	VoidSymbol = 0
 
-	// High1 represents the first high-paying symbol
+	// High1 is the most valuable symbol
 	High1 = 1
 
-	// High2 represents the second high-paying symbol
+	// High2 is the second high-pay symbol
 	High2 = 2
 
-	// Med1 represents the first medium-paying symbol
+	// Med1 is the first medium-pay symbol
 	Med1 = 3
 
-	// Med2 represents the second medium-paying symbol
+	// Med2 is the second medium-pay symbol
 	Med2 = 4
 
-	// Ace represents the Ace card symbol (low-paying)
-	Ace = 5
+	// Low1 is the first low-pay symbol
+	Low1 = 5
 
-	// King represents the King card symbol (low-paying)
-	King = 6
+	// Low2 is the second low-pay symbol
+	Low2 = 6
 
-	// Queen represents the Queen card symbol (low-paying)
-	Queen = 7
+	// Low3 is the third low-pay symbol
+	Low3 = 7
 
-	// Jack represents the Jack card symbol (low-paying)
-	Jack = 8
+	// Low4 is the lowest-pay symbol and the only symbol that pays from 2 reels
+	Low4 = 8
 
-	// WildID represents the wild symbol that can substitute for other symbols
+	// WildID is the wild symbol, it substitutes for symbols 1-8 and appears on reels 2-4 only
 	WildID = 9
 )
 
 // Game mechanics constants
 const (
-	// MaxRowIndex is the total number of rows on the game board.
+	// MaxRowIndex is the index of the last row of the board (the board has 3 rows).
 	MaxRowIndex = 2
 
+	// Step_TYPE_BASE_SPIN is the type of a base spin step.
 	Step_TYPE_BASE_SPIN = 1
+	// Step_TYPE_FREE_SPIN is the type of a free spin step (not used in this game).
 	Step_TYPE_FREE_SPIN = 2
-	Step_TYPE_RE_SPIN   = 3
+	// Step_TYPE_RE_SPIN is the type of a respin step (not used in this game).
+	Step_TYPE_RE_SPIN = 3
 )

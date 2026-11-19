@@ -10,6 +10,7 @@ import (
 
 // RoundParser processes round results and accumulates simulation statistics
 type RoundParser struct {
+	// res accumulates the statistics of all processed rounds.
 	res *result.Result
 }
 
@@ -99,6 +100,14 @@ func parseLineWinEvent(curEvent events.Event) uint64 {
 	return lineWins
 }
 
+// parseJackpotWinEvent extracts the jackpot prize from a JackpotWinEvent.
+// Returns 0 if the event is not a *events.JackpotWinEvent.
+//
+// Parameters:
+//   - curEvent: game event to inspect
+//
+// Returns:
+//   - jackpot prize value, or 0 if type assertion fails
 func parseJackpotWinEvent(curEvent events.Event) uint64 {
 	coinWinEvent, ok := curEvent.(*events.JackpotWinEvent)
 	if !ok {

@@ -11,7 +11,7 @@ import (
 // The volatility indicates the risk level of the game (e.g., "low", "medium", "high").
 //
 // Parameters:
-//   - reader: CSV adapter for reading configuration files
+//   - csvReader: CSV adapter for reading configuration files
 //   - generalPath: path builder for locating the volatility configuration file
 //
 // Returns:

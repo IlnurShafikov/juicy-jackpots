@@ -13,11 +13,8 @@ type Payload struct {
 	// Events contain all game events that occurred (wins, triggers, etc.)
 	Events []events.Event `json:"events,omitempty"`
 
-	// Symbols represent the initial symbol board before any transformations
+	// Symbols is the board of the spin; coin positions carry the JpToken property
 	Symbols []*common.Symbol `json:"symbols"`
-
-	// AfterSymbols represents the final symbol board after all transformations
-	AfterSymbols []*common.Symbol `json:"afterSymbols,omitempty"`
 
 	// NextStepType indicates what type of step comes next (base, free, etc.)
 	NextStepType int `json:"nextStepType"`

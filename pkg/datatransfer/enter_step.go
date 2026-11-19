@@ -1,8 +1,9 @@
-//nolint:all // it's ok for enter step
 package datatransfer
 
 import (
 	"fmt"
+
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/IlnurShafikov/juicy-jackpots/internal/entities/rules"
 	"github.com/IlnurShafikov/juicy-jackpots/internal/game"
@@ -10,7 +11,6 @@ import (
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/common"
 	"github.com/IlnurShafikov/juicy-jackpots/pkg/datatransfer/dto/step"
 	"github.com/IlnurShafikov/slot-engine/pkg/model"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // GetEnterResult creates the initial game load result sent to the client.
@@ -27,7 +27,7 @@ func GetEnterResult(betValue uint64, gameMods *game.Mods) (*step.LoadGameResult,
 	simpleCostMultiplier := gameMods.Simple.CostMultiplier()
 	roundCost := betValue * simpleCostMultiplier
 
-	clientEnterStep, err := enterStep(roundCost, betValue)
+	clientEnterStep, err := enterStep(roundCost)
 	if err != nil {
 		return nil, fmt.Errorf("get enter step: %w", err)
 	}
@@ -50,13 +50,12 @@ func GetEnterResult(betValue uint64, gameMods *game.Mods) (*step.LoadGameResult,
 //
 // Parameters:
 //   - cost: the cost of a spin at the current bet level
-//   - betValue: the player's bet amount
 //
 // Returns:
 //   - pointer to base Step DTO representing the initial state
 //   - error if construction fails
-func enterStep(cost, betValue uint64) (*base.Step, error) {
-	clientSymbols, err := TransformSymbols(initBoard(), betValue)
+func enterStep(cost uint64) (*base.Step, error) {
+	clientSymbols, err := TransformSymbols(initBoard(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("transfer symbols: %w", err)
 	}
@@ -122,10 +121,11 @@ func initialPayload(clientSymbols []*common.Symbol) base.Payload {
 	}
 }
 
+// initBoard returns the fixed board shown to the player before the first spin.
 func initBoard() model.Board {
 	return model.Board{
-		{rules.Ace, rules.High1, rules.High2},
-		{rules.Jack, rules.King, rules.Med1},
-		{rules.Ace, rules.Queen, rules.Med2},
+		{rules.Low1, rules.High1, rules.High2},
+		{rules.Low4, rules.Low2, rules.Med1},
+		{rules.Low1, rules.Low3, rules.Med2},
 	}
 }

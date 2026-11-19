@@ -8,6 +8,7 @@ import (
 // It provides a fluent API for constructing paths by appending successive
 // path segments (RTP version, mod type, phase, etc.).
 type PathBuilder struct {
+	// rootCfgPath is the path built so far.
 	rootCfgPath string
 }
 

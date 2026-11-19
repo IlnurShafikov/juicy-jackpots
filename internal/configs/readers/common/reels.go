@@ -14,7 +14,7 @@ import (
 // the weighted symbol sequence for that distribution group.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - phasePath: path builder pointing to the game phase configuration directory
 //   - groupIds: list of trigger group IDs whose reel files should be loaded
 //
@@ -22,7 +22,7 @@ import (
 //   - slice of Reels, one entry per group ID in the same order as groupIds
 //   - error if any reel file cannot be read or parsed
 func ReadReels(
-	reader *reader.Adapter,
+	csvReader *reader.Adapter,
 	phasePath *tools.PathBuilder,
 	groupIds []int,
 ) ([]*reels.Reels, error) {
@@ -36,7 +36,7 @@ func ReadReels(
 	for _, groupID := range groupIds {
 		filePrefix := fileName + strconv.Itoa(groupID)
 
-		reel, err := readReelGroup(reader, reelPath.File(filePrefix), groupID)
+		reel, err := readReelGroup(csvReader, reelPath.File(filePrefix), groupID)
 		if err != nil {
 			return nil, fmt.Errorf("read reels: %w", err)
 		}
@@ -51,7 +51,7 @@ func ReadReels(
 // value tagged with the given group ID.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - prefix: file path within the embedded FS to the reel group CSV
 //   - groupID: numeric identifier assigned to this reel strip group
 //
@@ -59,11 +59,11 @@ func ReadReels(
 //   - pointer to Reels containing the parsed symbol strips for the group
 //   - error if the file cannot be read or the strip data is invalid
 func readReelGroup(
-	reader *reader.Adapter,
+	csvReader *reader.Adapter,
 	prefix string,
 	groupID int,
 ) (*reels.Reels, error) {
-	data, err := reader.ReadCSV(prefix)
+	data, err := csvReader.ReadCSV(prefix)
 	if err != nil {
 		return nil, fmt.Errorf("read group reel: %w", err)
 	}

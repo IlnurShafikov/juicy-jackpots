@@ -4,6 +4,7 @@ import "github.com/IlnurShafikov/juicy-jackpots/internal/entities/result/events"
 
 // stepEventProvider is implemented by any game step that exposes its events.
 type stepEventProvider interface {
+	// Events returns the events of the step.
 	Events() []events.Event
 }
 

@@ -11,7 +11,7 @@ import (
 // This is a utility function used by other weight reading functions to parse weight data.
 //
 // Parameters:
-//   - reader: CSV file adapter for reading configuration files
+//   - csvReader: CSV file adapter for reading configuration files
 //   - filePath: complete path to the CSV file containing weight distribution
 //
 // Returns:

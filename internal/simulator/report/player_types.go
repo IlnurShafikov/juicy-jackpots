@@ -7,9 +7,12 @@ import (
 
 // Player represents a single player with balance and spin history
 type Player struct {
+	// InitialBalance is the balance the player started with.
 	InitialBalance uint64
+	// CurrentBalance is the balance after the spins made so far.
 	CurrentBalance uint64
-	SpinsCount     int
+	// SpinsCount is the number of spins the player made.
+	SpinsCount int
 }
 
 // NewPlayer creates a new player with initial balance
@@ -43,9 +46,12 @@ func (p *Player) IncrementSpins() {
 
 // PlayerGroup represents a group of players with same initial balance
 type PlayerGroup struct {
+	// InitialBalance is the balance the player started with.
 	InitialBalance uint64
-	Players        []*Player
-	PlayersCount   int
+	// Players are the players of the group.
+	Players []*Player
+	// PlayersCount is the number of players in the group.
+	PlayersCount int
 }
 
 // NewPlayerGroup creates a new group of players
@@ -65,10 +71,14 @@ func NewPlayerGroup(balance uint64, playersCount int) *PlayerGroup {
 
 // PlayerStats contains statistical results for a player group
 type PlayerStats struct {
+	// InitialBalance is the balance the player started with.
 	InitialBalance uint64
-	PlayersCount   int
-	MedianSpins    float64
-	AllSpinCounts  []int
+	// PlayersCount is the number of players in the group.
+	PlayersCount int
+	// MedianSpins is the median number of spins until the balance is spent.
+	MedianSpins float64
+	// AllSpinCounts contains the spin counts of every player.
+	AllSpinCounts []int
 }
 
 // NewPlayerStats creates stats from a player group
